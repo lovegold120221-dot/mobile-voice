@@ -17,13 +17,13 @@ service cloud.firestore {
     
     // User Schema Validation
     function isValidUser(data) {
-      return (data.email == null || data.email is string)
-        && (data.displayName == null || data.displayName is string)
-        && (data.photoURL == null || data.photoURL is string)
-        && (data.accessToken == null || data.accessToken is string)
-        && (data.updatedAt == null || data.updatedAt is string)
-        && (data.memories == null || data.memories is list)
-        && (data.settings == null || data.settings is map);
+      return (data.get('email', null) == null || data.get('email', null) is string)
+        && (data.get('displayName', null) == null || data.get('displayName', null) is string)
+        && (data.get('photoURL', null) == null || data.get('photoURL', null) is string)
+        && (data.get('accessToken', null) == null || data.get('accessToken', null) is string)
+        && (data.get('updatedAt', null) == null || data.get('updatedAt', null) is string)
+        && (data.get('memories', null) == null || data.get('memories', null) is list)
+        && (data.get('settings', null) == null || data.get('settings', null) is map);
     }
 
     function isValidHistory(data) {
