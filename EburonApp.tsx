@@ -20,6 +20,7 @@ import {
   Plug, Lock, Pencil, Maximize2
 } from 'lucide-react';
 import { ArtifactOverlay } from './components/ArtifactOverlay';
+import Sidebar from './components/Sidebar';
 
 function StreamingText({ text, isFinal }: { text: string; isFinal: boolean }) {
   const [displayedText, setDisplayedText] = useState(isFinal ? text : "");
@@ -90,6 +91,7 @@ export default function EburonApp() {
   const [isSignupMode, setIsSignupMode] = useState(false);
   const activeOverlay = useUI((state) => state.activeOverlay);
   const setActiveOverlay = useUI((state) => state.setActiveOverlay);
+  const toggleSidebar = useUI((state) => state.toggleSidebar);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -535,7 +537,11 @@ Output only natural spoken text. No stage directions, no brackets, no role label
   };
 
   const handleToolAction = (toolId: string) => {
-    if (['history', 'tools', 'profile', 'settings', 'whatsapp', 'scanner', 'location', 'map', 'picker'].includes(toolId)) {
+    if (toolId === 'settings') {
+      toggleSidebar();
+      return;
+    }
+    if (['history', 'tools', 'profile', 'whatsapp', 'scanner', 'location', 'map', 'picker'].includes(toolId)) {
       if (toolId == 'location' || toolId == 'map') {
          handleLocationSkillClick();
          return;
@@ -656,13 +662,34 @@ Output only natural spoken text. No stage directions, no brackets, no role label
           </div>
         )}
 
-        <div className="header-right">
+        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button 
              onClick={handleConnectToggle} 
              className="connect-btn"
              style={{ backgroundColor: connected ? 'var(--accent-active)' : 'var(--accent-primary)' }}
           >
             <Plug size={18} /> <span>{connected ? 'Connected' : 'Connect'}</span>
+          </button>
+
+          <button 
+             onClick={toggleSidebar} 
+             className="settings-icon-btn"
+             style={{ 
+               background: 'var(--bg-chip)', 
+               color: 'var(--text-main)', 
+               border: 'none', 
+               padding: '8px', 
+               borderRadius: '50%',
+               display: 'flex', 
+               alignItems: 'center', 
+               justifyContent: 'center', 
+               cursor: 'pointer',
+               width: '36px', 
+               height: '36px'
+             }}
+             aria-label="Toggle settings sidebar"
+          >
+            <Settings size={18} />
           </button>
         </div>
       </header>
@@ -1757,6 +1784,9 @@ Output only natural spoken text. No stage directions, no brackets, no role label
 
         </div>
       </div>
+
+      {/* Settings Setup Sidebar */}
+      <Sidebar />
     </div>
   );
 }
